@@ -1,0 +1,77 @@
+{
+	"easycom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/main/index",
+			"style": {
+				"navigationBarTitleText": "app学习"
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/user/index",
+			"style": {
+				"navigationBarTitleText": "用户中心"
+			}
+		},
+		{
+			"path": "pages/user/updatePwd",
+			"style": {
+				"navigationBarTitleText": "更改密码"
+			}
+		},
+		{
+			"path": "pages/report/assayReport/day/index",
+			"style": {
+				"navigationBarTitleText": "化验日报表",
+				"navigationStyle":"custom"
+			}
+		}
+	    ,{
+            "path" : "pages/report/assayReport/day/detail",
+            "style" : {
+				"navigationBarTitleText": "化验日报表 明细"
+			}
+        },{
+			"path": "pages/report/assayReport/month/index",
+			"style": {
+				"navigationBarTitleText": "化验日报表",
+				"navigationStyle":"custom"
+			}
+		}
+	    ,{
+            "path" : "pages/report/assayReport/month/detail",
+            "style" : {
+				"navigationBarTitleText": "化验月报表 明细"
+			}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"pageOrientation": "auto",
+		"onReachBottomDistance": 200
+	},
+	"tabBar": {
+		"color":"#8a8a8a",
+		"selectedColor":"#d4237a",
+		"borderStyle":"black",
+		"backgroundColor":"#ffffff",
+		"list": [{
+			"text": "首页",
+			  "pagePath": "pages/main/index"
+		}, {
+			"text": "我的",
+			"pagePath": "pages/user/index"
+		}]
+	}
+}
