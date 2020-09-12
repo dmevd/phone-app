@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import App from './App';
+import myReport from './components/my-report/my-report.vue';
+
 
 import request from './common/request.js';
 import api from './common/index.js';
@@ -23,6 +25,10 @@ import store from '@/store';
 let vuexStore = require('@/store/$u.mixin.js');
 Vue.mixin(vuexStore);
 
+// 不起作用，不知道啥原因
+//Vue.component(myReport.name, myReport);
+Vue.component('my-report', myReport);
+
 const app = new Vue({
   store,
   ...App
@@ -32,12 +38,8 @@ app.$mount();
 import myjs from './common/my.js';
 Vue.use(myjs);
 
-import report from '@/components/report/index';
-Vue.use(report);
-
-
-import noBadTable from '@/components/no-bad-table/index';
-Vue.use(noBadTable);
+import noBadTable from './components/no-bad-table/no-bad-table.vue';
+Vue.component('no-bad-table', noBadTable);
 
 import sysConfig from './common/config'
-Vue.use(sysConfig)
+Vue.use(sysConfig);

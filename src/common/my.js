@@ -62,9 +62,9 @@ exports.install = function (Vue, options) {
 			let HCuserName = uni.getStorageSync("HCuserName");
 			let HCnickName = uni.getStorageSync("HCnickName");
 			return {
-				"userId": HCuserId,
-				"userName": HCuserName,
-				"nickName": HCnickName
+				userId: HCuserId,
+				userName: HCuserName,
+				nickName: HCnickName
 			}
 		}
 	};
@@ -90,7 +90,7 @@ exports.install = function (Vue, options) {
 
 		/** 化验日报表 */
 		let OBJ_TYPE_CODE_ASSAY_REPORT_DAY = 11;
-		let OBJ_TYPE_NAME_ASSAY_REPORT_DAY = "化验日报表22";
+		let OBJ_TYPE_NAME_ASSAY_REPORT_DAY = "化验日报表";
 		/** 化验月报表 */
 		let OBJ_TYPE_CODE_ASSAY_REPORT_MONTH = 13;
 		let OBJ_TYPE_NAME_ASSAY_REPORT_MONTH = "化验月报表1";

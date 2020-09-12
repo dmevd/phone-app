@@ -1,5 +1,5 @@
 <template>
-		<MyReport :reportType="reportType" ref='report'></MyReport>
+		<my-report :reportType="reportType" ref='report'></my-report>
 </template>
 
 <script>

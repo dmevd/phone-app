@@ -1,8 +1,8 @@
 {
 	"easycom": {
-			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{
 			"path": "pages/main/index",
 			"style": {
@@ -42,7 +42,7 @@
         },{
 			"path": "pages/report/assayReport/month/index",
 			"style": {
-				"navigationBarTitleText": "化验日报表",
+				"navigationBarTitleText": "化验月报表",
 				"navigationStyle":"custom"
 			}
 		}
@@ -51,15 +51,119 @@
             "style" : {
 				"navigationBarTitleText": "化验月报表 明细"
 			}
-        }
+        },
+		{
+			"path": "pages/report/assayReport/month2/index",
+			"style": {
+				"navigationBarTitleText": "化验月报表2",
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path" : "pages/report/assayReport/month2/detail",
+			"style" : {
+				"navigationBarTitleText": "化验月报表2 明细"
+			}
+		},
+		{
+			"path": "pages/report/assayReport/quarter/index",
+			"style": {
+				"navigationBarTitleText": "污水化验季报表",
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path" : "pages/report/assayReport/quarter/detail",
+			"style" : {
+				"navigationBarTitleText": "污水化验季报表 明细"
+			}
+		},
+		{
+			"path": "pages/report/assayReport/quarter2/index",
+			"style": {
+				"navigationBarTitleText": "污泥化验季报表",
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path" : "pages/report/assayReport/quarter2/detail",
+			"style" : {
+				"navigationBarTitleText": "污泥化验季报表 明细"
+			}
+		},
+		{
+			"path": "pages/report/assayReport/year/index",
+			"style": {
+				"navigationBarTitleText": "污水化验年报表",
+				"navigationStyle":"custom"
+			}
+		}
+		,{
+			"path" : "pages/report/assayReport/year/detail",
+			"style" : {
+				"navigationBarTitleText": "污水化验年报表 明细"
+			}
+		},
+		{
+			"path": "pages/report/assayReport/year2/index",
+			"style": {
+				"navigationBarTitleText": "污泥化验年报表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/report/assayReport/year2/detail",
+			"style" : {
+				"navigationBarTitleText": "污泥化验年报表 明细"
+			}
+		},
+		{
+			"path": "pages/report/deviceReport/month/index",
+			"style": {
+				"navigationBarTitleText": "设备月报表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/report/deviceReport/month/detail",
+			"style" : {
+				"navigationBarTitleText": "设备月报表 明细"
+			}
+		},
+		{
+			"path": "pages/report/deviceReport/quarter/index",
+			"style": {
+				"navigationBarTitleText": "设备季报表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/report/deviceReport/quarter/detail",
+			"style" : {
+				"navigationBarTitleText": "设备季报表 明细"
+			}
+		},
+		{
+			"path": "pages/report/deviceReport/year/index",
+			"style": {
+				"navigationBarTitleText": "设备年报表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/report/deviceReport/year/detail",
+			"style" : {
+				"navigationBarTitleText": "设备年报表 明细"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "app学习",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"pageOrientation": "auto",
-		"onReachBottomDistance": 200
+		"onReachBottomDistance": 150
 	},
 	"tabBar": {
 		"color":"#8a8a8a",
@@ -73,5 +177,15 @@
 			"text": "我的",
 			"pagePath": "pages/user/index"
 		}]
+	},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "pages/main/index", //启动页面，必选
+				"query": "name=tyc&age=18" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
 	}
 }

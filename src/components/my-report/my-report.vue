@@ -26,7 +26,7 @@
 						:columns="tableConfig.columns"
 						:list="tableConfig.tableData"
 						:loading="loading = false"
-						@delete="deleteFn"
+						@reportAction="reportActionFn"
 						selection="single"  @on-selection-change="onSelectionChange"
 
 				>
@@ -84,6 +84,43 @@
 			</u-calendar>
 			<u-action-sheet :list="reviewSelector.list" v-model="reviewSelector.show" @click="confirmReview"></u-action-sheet>
 			<u-action-sheet :list="auditSelector.list" v-model="auditSelector.show" @click="confirmAudit"></u-action-sheet>
+
+
+			<!--报表操作-->
+			<u-popup border-radius="10" v-model="reportPopupConfig.show"
+					 @close="reportPopupConfig.show = false" @open="reportPopupConfig.show = true" :mode="reportPopupConfig.mode"
+					 length="45%" :mask="reportPopupConfig.mask"
+			>
+				<view class="content wrap" >
+					<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
+						<u-form-item label-width="150"
+									 label-position="left" label="报表日期" prop="userName" >
+							<u-input placeholder="请选择报表日期" v-model="showText.dateText" @click="openCalendar" type="text"
+									 :disabled="true"></u-input>
+						</u-form-item>
+						<u-form-item label-width="150"
+									 label-position="left" label="复核结果" prop="nickName" >
+							<u-input :border="border= false" type="select" :select-open="reviewSelector.show"
+									 v-model="showText.reviewResultText" placeholder="请选择复核结果"
+									 @click="reviewSelector.show = true"></u-input>
+						</u-form-item>
+						<u-form-item label-width="150"
+									 label-position="left" label="审核结果" prop="pwd">
+							<u-input :border="border= false" type="select" :select-open="auditSelector.show"
+									 v-model="showText.auditResultText" placeholder="请选择审核结果"
+									 @click="auditSelector.show = true"></u-input>
+						</u-form-item>
+					</u-form>
+
+					<!--查询按钮-->
+					<u-button @click="reset" >重置</u-button>
+					<br/>
+					<u-button @click="submit" >查询</u-button>
+
+				</view>
+
+			</u-popup>
+
 		</view>
 		<u-toast ref="uToast" />
 	</view>
@@ -92,7 +129,7 @@
 <script>
 	export default {
 		// 注意这里的name命名，就是你以后封装好后使用的组件名
-		name: 'MyReport',
+		name: 'my-report',// main.js 这个参数获取不到，不知道为啥
 		props:{
 			reportType:{
 				type: Number,
@@ -125,11 +162,11 @@
 				},
 				tableConfig:{
 					columns:[{
-						title: "operate",
+						title: "操作",
 						key: "$operate",
 						$operateList: [{
-							label: "删除",
-							event: "delete"
+							label: "操作",
+							event: "reportAction"
 						}]
 					},
 						{title: '报表名称',	key: 'name'	},{	title: '报表日期',key: 'date'},{title: '企业',key: 'unitName'},
@@ -154,6 +191,23 @@
 					show: false,
 					mode: 'top',
 					mask: true, // 是否显示遮罩
+				},
+				reportPopupConfig:{
+					show: false,
+					mode: 'top',
+					mask: true, // 是否显示遮罩
+					reviewParams:{
+						type: -1,
+						id:1
+					},
+					auditParams:{
+						type: -1,
+						id:1,
+					},
+					deleteParams:{
+
+					}
+
 				},
 				calendarConfig:{
 					show: false,
@@ -187,7 +241,7 @@
 			}
 		},
 		//页面初始加载
-		mounted(){
+		created(){
 			let me = this;
 			me.model.reportType = me.reportType;
 			me.params.type = me.reportType;
@@ -200,15 +254,6 @@
 					me.tableConfig.tableHeight = res.windowHeight - (res.windowHeight * 0.17);
 				}
 			});
-		},
-		onReachBottom(){//
-			console.log("页面到底了");
-		},
-		onPullDownRefresh() {
-			console.log('下拉刷新...')
-		},
-		onReady(){
-			// this.$refs.uForm.setRules(this.rules);
 		},
 		methods:{
 			openCalendar:function () {
@@ -317,7 +362,7 @@
 				this.showText.reviewResultText = '';
 				this.showText.dateText = '';
 			},
-			deleteFn(data){
+			reportActionFn(data){
 				console.log(data);
 				uni.showToast({
 					title: `删除第${data.index}行`,

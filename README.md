@@ -1,4 +1,4 @@
-# my-project
+# phone-app
 
 ## Project setup
 ```

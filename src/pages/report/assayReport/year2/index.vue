@@ -6,7 +6,7 @@
 	export default {
 		data() {
 			return {
-				reportType:14
+				reportType:19
 			}
 		},
 		onReachBottom(){

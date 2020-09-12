@@ -18,10 +18,10 @@
 					<image slot="icon" class="u-cell-icon" :src="getIcon(item1.icon)" mode="widthFix"></image>
 				</u-cell-item>
 			</u-cell-group>
+			<u-gap :height="70" ></u-gap>
 		</view>
 
 		<!-- 底部菜单 -->
-<!--		 <u-gap height="70"></u-gap>-->
 		 <u-tabbar :list="vuex_tabbar"></u-tabbar>
 		 <u-toast ref="uToast"></u-toast>
 	</view>
@@ -141,7 +141,6 @@
 
 						}
 
-						menuList.push({groupName: "凸显"});
 						this.menuList = menuList;
 					});
 

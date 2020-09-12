@@ -177,7 +177,6 @@
 <script>
 	import noBadTableLoading from "./loading.vue"
 	export default {
-		name: 'no-bad-table',
 		components:{noBadTableLoading},
 		props: {
 			//显示列
