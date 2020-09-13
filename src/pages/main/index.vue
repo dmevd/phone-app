@@ -18,7 +18,7 @@
 					<image slot="icon" class="u-cell-icon" :src="getIcon(item1.icon)" mode="widthFix"></image>
 				</u-cell-item>
 			</u-cell-group>
-			<u-gap :height="70" ></u-gap>
+			<u-gap :height="80" ></u-gap>
 		</view>
 
 		<!-- 底部菜单 -->

@@ -18,14 +18,15 @@
 			<view class="table-wrap">
 				<u-search v-model="showText.dateText" placeholder="请选择报表日期" @click="openCalendar" :disabled="true"
 						  @search="submit" :shape="shape = 'square'" @custom="submit"
-						  :show-action="showAction = true" :input-align="inputAlign = 'left'" ></u-search>
+						  :show-action="showAction = true" :action-style="{width:150}" margin="0 30rpx 0 0"
+						  :input-align="inputAlign = 'left'" ></u-search>
 			</view>
 			<!--表格-->
 			<view class="table-wrap">
 				<no-bad-table
 						:columns="tableConfig.columns"
 						:list="tableConfig.tableData"
-						:loading="loading = false"
+						:loading="tableConfig.loading"
 						@reportAction="reportActionFn"
 						selection="single"  @on-selection-change="onSelectionChange"
 
@@ -47,6 +48,7 @@
 					 length="45%" :mask="popupConfig.mask"
 			>
 				<view class="content wrap" >
+					<br/><br/>
 					<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 						<u-form-item label-width="150"
 									 label-position="left" label="报表日期" prop="userName" >
@@ -169,7 +171,7 @@
 							event: "reportAction"
 						}]
 					},
-						{title: '报表名称',	key: 'name'	},{	title: '报表日期',key: 'date'},{title: '企业',key: 'unitName'},
+						{	title: '报表日期',key: 'date'},{title: '企业',key: 'unitName'},
 						{title: '提交人',	key: 'subByName'},{	title: '复核结果',key: 'reviewResultName'},
 						{title: '复核人',key: 'reviewByName'},{	title: '审核结果',key: 'auditResultName'},
 						{title: '复核人',key: 'auditByName'}
@@ -180,6 +182,7 @@
 					],
 					loadStatus:'nomore',//loading / nomore  / loadmore,
 					tableHeight: 1000,
+					loading:false
 				},
 				touchConfig: {
 					scalImgShow: -1,
@@ -328,7 +331,10 @@
 			},
 			loadTableData(pageNum){
 				let me = this;
-				this.params.pageNum = pageNum;
+				me.params.pageNum = pageNum;
+				me.tableConfig.loading = true;
+
+				uni.vibrateShort({});
 
 				me.$api.reportService('getReportList',
 						me.params
@@ -351,6 +357,7 @@
 					}
 
 					me.showMyToast(me);
+					me.tableConfig.loading = false;
 				});
 			},
 			reset(){

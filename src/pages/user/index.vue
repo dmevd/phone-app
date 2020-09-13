@@ -39,10 +39,10 @@
 		<u-action-sheet :list="loginOutModel.actionSheetList" v-model="loginOutModel.actionSheetShow" @click="loginOut"></u-action-sheet>
 
 		<!-- 底部菜单 -->
-		 <u-gap height="70"></u-gap>
-				<u-tabbar :list="vuex_tabbar"></u-tabbar>
-				<u-toast ref="uToast" ></u-toast>
-		</view>
+		<u-gap height="80"></u-gap>
+		<u-tabbar :list="vuex_tabbar"></u-tabbar>
+		<u-toast ref="uToast" ></u-toast>
+	</view>
 </template>
 
 <script>
