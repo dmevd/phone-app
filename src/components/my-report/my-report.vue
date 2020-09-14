@@ -89,44 +89,73 @@
 
 
 			<!--报表操作-->
+			<!--操作列表-->
 			<u-action-sheet :list="tableConfig.rowDataAction.list" v-model="tableConfig.rowDataAction.show" @click="selectRowDataAction"></u-action-sheet>
-			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.audit.show"
-					 @close="tableConfig.rowDataAction.audit = false" @open="tableConfig.rowDataAction.audit.show = true" :mode="mode = 'top'"
+			<!--复核-->
+			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.review.show"
+					 @close="tableConfig.rowDataAction.review = false" @open="tableConfig.rowDataAction.review.show = true" mode="top"
 					 :mask="true"
 			>
 				<view class="content wrap" >
 					<br/><br/>
-					<u-form ref="uReportActionForm" :errorType="errorType">
-						<u-form-item label-width="150" type="textarea"
-									 label-position="left" label="备注" prop="remark">
-							<u-input :border="border= false"
-									 v-model="" placeholder="请输入备注"
-							></u-input>
+					<u-form ref="uReviewActionForm" :errorType="errorType">
+						<u-form-item label-width="150"
+									 label-position="left" label="复核结果" >
+							<u-input :border="border= false" type="select" :select-open="tableConfig.rowDataAction.review.selector.show"
+									 v-model="tableConfig.rowDataAction.review.resultText" placeholder="请复核" :require="true"
+									 @click="tableConfig.rowDataAction.review.selector.show =true"></u-input>
 						</u-form-item>
 
 						<u-form-item label-width="150"
-									 label-position="left" label="复核结果" prop="nickName" >
-							<u-input :border="border= false" type="select" :select-open="reviewSelector.show"
-									 placeholder="请复核"
-									 @click="reviewSelector.show = true"></u-input>
-						</u-form-item>
-						<u-form-item label-width="150"
-									 label-position="left" label="审核结果" prop="pwd">
-							<u-input :border="border= false" type="select" :select-open="auditSelector.show"
-									 v-model="showText.auditResultText" placeholder="请审核"
-									 @click="auditSelector.show = true"></u-input>
+									 label-position="left" label="备注">
+							<u-input :border="border= true" type="textarea" :height="200"
+									 :auto-height="false"
+									 v-model="tableConfig.rowDataAction.review.remark" placeholder="请输入备注"
+							></u-input>
 						</u-form-item>
 					</u-form>
 
 					<!--查询按钮-->
-					<u-button @click="" >重置</u-button>
 					<br/>
-					<u-button @click="submit" >查询</u-button>
+					<u-button @click="reviewFn" >提交</u-button>
+
+				</view>
+
+			</u-popup>
+			<!--审核-->
+			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.audit.show"
+					 @close="tableConfig.rowDataAction.audit = false" @open="tableConfig.rowDataAction.audit.show = true" mode="top"
+					 :mask="true"
+			>
+				<view class="content wrap" >
+					<br/><br/>
+					<u-form ref="uAuditActionForm" :errorType="errorType">
+						<u-form-item label-width="150"
+									 label-position="left" label="审核结果" >
+							<u-input :border="border= false" type="select" :select-open="tableConfig.rowDataAction.audit.selector.show"
+									 v-model="tableConfig.rowDataAction.audit.resultText" placeholder="请审核" :require="true"
+									 @click="tableConfig.rowDataAction.audit.selector.show =true"></u-input>
+						</u-form-item>
+
+						<u-form-item label-width="150"
+									 label-position="left" label="备注">
+							<u-input :border="true" type="textarea" :height="200"
+									 :auto-height="false"
+									 v-model="tableConfig.rowDataAction.audit.remark" placeholder="请输入备注"
+							></u-input>
+						</u-form-item>
+					</u-form>
+
+					<!--查询按钮-->
+					<br/>
+					<u-button @click="auditFn" >提交</u-button>
 
 				</view>
 
 			</u-popup>
 
+			<u-action-sheet :list="tableConfig.rowDataAction.review.selector.list" v-model="tableConfig.rowDataAction.review.selector.show" @click="showReview"></u-action-sheet>
+			<u-action-sheet :list="tableConfig.rowDataAction.audit.selector.list"  v-model="tableConfig.rowDataAction.audit.selector.show"  @click="showAudit"></u-action-sheet>
 
 		</view>
 		<u-toast ref="uToast" />
@@ -197,11 +226,32 @@
 						list:[{text: '查看详细',value: 'detail'},{text: '复核',value: 'review'},
 							{text: '审核',value: 'audit'},{text: '删除',value: 'delete'}],
 
+						review:{
+							show: false,
+							remark: '',
+							result:'',
+							resultText:'',
+							selector:{
+								show: false,
+								mode: 'single-column', // single-column, mutil-column, mutil-column-auto
+								list:[
+									{text: '复核通过',value: 1},
+									{text: '复核不通过',value: 0	}]
+							}
+						},
 						audit:{
 							show: false,
-							reviewShow: true
+							remark: '',
+							result:'',
+							resultText:'',
+							selector:{
+								show: false,
+								mode: 'single-column', // single-column, mutil-column, mutil-column-auto
+								list:[
+									{text: '审核通过',value: 1},
+									{text: '审核不通过',value: 0	}]
+							}
 						}
-
 					}
 				},
 				touchConfig: {
@@ -383,15 +433,10 @@
 			selectRowDataAction(index){
 				let me = this;
 				let value = me.tableConfig.rowDataAction.list[index].value;
-				let row = me.tableConfig.rowDataAction.row;
 				if(value === 'detail'){
 
 				}else if(value === 'review'){
-					me.tableConfig.rowDataAction.audit.show = true;
-					if(row.reviewResult === 2){
-						me.tableConfig.rowDataAction.audit.reviewShow = true;
-					}
-					// me.tableConfig.rowDataAction.audit.reviewShow =
+					me.tableConfig.rowDataAction.review.show = true;
 				}else if(value === 'audit'){
 					me.tableConfig.rowDataAction.audit.show = true;
 				}else if(value === 'delete') {
@@ -419,6 +464,20 @@
 			onSelectionChange(obj){
 				console.log("对比前后，选中的变化");
 				console.log(obj)
+			},
+			showAudit(index){
+				this.tableConfig.rowDataAction.audit.result = this.tableConfig.rowDataAction.audit.selector.list[index].value;
+				this.tableConfig.rowDataAction.audit.resultText = this.tableConfig.rowDataAction.audit.selector.list[index].text;
+			},
+			auditFn(){
+
+			},
+			showReview(index){
+				this.tableConfig.rowDataAction.review.result = this.tableConfig.rowDataAction.review.selector.list[index].value;
+				this.tableConfig.rowDataAction.review.resultText = this.tableConfig.rowDataAction.review.selector.list[index].text;
+			},
+			reviewFn(){
+
 			}
 		}
 	}
