@@ -138,19 +138,6 @@ export default {
 </script>
 
 <style lang="scss">
-.mui-checkbox input[type='checkbox']:checked:before {
-    color: #00bbb1;
-}
-.RememberPass {
-    color: #adadad;
-
-    margin-top: 5px;
-}
-.RememberCheck {
-    margin-left: -50%;
-    margin-top: 10px;
-    color: #adadad;
-}
 .content {
     text-align: center;
     height: 400upx;
@@ -248,16 +235,5 @@ export default {
 
 .wrap {
 	padding: 30rpx;
-}
-
-.agreement {
-	display: flex;
-	align-items: center;
-	margin: 40rpx 0;
-
-	.agreement-text {
-		padding-left: 8rpx;
-		color: $u-tips-color;
-	}
 }
 </style>

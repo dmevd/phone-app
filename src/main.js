@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './App';
-import myReport from './components/my-report/my-report.vue';
 
 
 import request from './common/request.js';
@@ -25,6 +24,8 @@ import store from '@/store';
 let vuexStore = require('@/store/$u.mixin.js');
 Vue.mixin(vuexStore);
 
+
+import myReport from './components/my-report/my-report.vue';
 // 不起作用，不知道啥原因
 //Vue.component(myReport.name, myReport);
 Vue.component('my-report', myReport);

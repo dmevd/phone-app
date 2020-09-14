@@ -2,10 +2,10 @@ import Vue from 'vue'
 import sysConfig from './config.js'
 
 const baseUrl = sysConfig.baseUrl;
-const request = {}
-const apiUrl = baseUrl + 'api/route'
-const fileUrl = baseUrl +  'excel/download'
-let header = {'Access-Control-Allow-Origin': true}
+const request = {};
+const apiUrl = baseUrl + 'api/route';
+const fileUrl = baseUrl +  'excel/download';
+let header = {'Access-Control-Allow-Origin': true};
 let me = this;
 
 
@@ -18,7 +18,7 @@ let client = function(model, action, params){
 		},
 		body:params
 	}
-}
+};
 
 request.apiRequest = (model, action, data) => {
 
@@ -30,26 +30,28 @@ request.apiRequest = (model, action, data) => {
 		header
     }).then(res => {
 		let data = JSON.parse(res[1].data);
-        if (data.code && data.code != 200) {
+        if (data.code && data.code != '200') {
 			uni.showToast({
 　　　　　　　　　　　　title: data.msg,
 　　　　　　　　　　　　icon: 'none'
-			})
+			});
             throw data
         }
 		return data;
     }).catch(parmas => {
 　　　　　　switch (parmas.code) {
-　　　　　　　　case 400:
-　　　　　　　　　　uni.clearStorageSync()
-　　　　　　　　　　break
+　　　　　　　　case '400':
+　　　　　　　　　　uni.clearStorageSync();
+　　　　　　　　　　break;
 　　　　　　　　default:
 　　　　　　　　　　uni.showToast({
-　　　　　　　　　　　　title: parmas.msg,
-　　　　　　　　　　　　icon: 'none'
-　　　　　　　　　　})
-　　　　　　　　　　return Promise.reject()
-　　　　　　　　　　break
+　　　　　　　　　　　　title: parmas.msg ? params.msg : '请检查网络！',
+　　　　　　　　　　　　icon: 'none',
+                       duration: 2000,
+                       position: 'bottom'
+　　　　　　　　　　});
+　　　　　　　　　　return Promise.reject();
+　　　　　　　　　　break;
 　　　　　　}
 　　})
 
@@ -66,24 +68,21 @@ request.apiRequest = (model, action, data) => {
          data: client(model, action, data),
          dataType: 'application/json'
      }).then(res => {
-         if (res[1].data.status && res[1].data.code == 200) {
+         if (res[1].data.status && res[1].data.code == '200') {
              return res[1]
          } else {
              throw res[1].data
          }
      }).catch(parmas => {
- 　　　　　　switch (parmas.code) {
- 　　　　　　　　case 401:
- 　　　　　　　　　　uni.clearStorageSync()
- 　　　　　　　　　　break
- 　　　　　　　　default:
- 　　　　　　　　　　uni.showToast({
- 　　　　　　　　　　　　title: parmas.message,
- 　　　　　　　　　　　　icon: 'none'
- 　　　　　　　　　　})
- 　　　　　　　　　　return Promise.reject()
- 　　　　　　　　　　break
- 　　　　　　}
+ 　　　if (parmas.code == '401') {
+           uni.clearStorageSync();
+       } else {
+           uni.showToast({
+                       title: parmas.message,
+                       icon: 'none'
+                     });
+           return Promise.reject();
+       }
  　　})
   };
 

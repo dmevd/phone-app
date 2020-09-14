@@ -1,4 +1,3 @@
-
 <template>
 	<view >
 		<u-navbar title-color="#000000" back-icon-color="#000000"
@@ -29,13 +28,7 @@
 						:loading="tableConfig.loading"
 						@reportAction="reportActionFn"
 						selection="single"  @on-selection-change="onSelectionChange"
-
 				>
-<!--					:slot-cols="['name']"-->
-<!--					<template v-slot="{ row }">-->
-<!--						<view style="font-weight: blod;color:red;">{{ row.name }}</view>-->
-<!--					</template>-->
-
 				</no-bad-table>
 				<br/>
 				<u-loadmore :status="tableConfig.loadStatus" bgColor="transparent" @loadmore="loadMoreData"></u-loadmore>
@@ -45,11 +38,18 @@
 			<!--查询条件-->
 			<u-popup border-radius="10" v-model="popupConfig.show"
 					 @close="popupConfig.show = false" @open="popupConfig.show = true" :mode="popupConfig.mode"
-					 length="45%" :mask="popupConfig.mask"
+					  :mask="popupConfig.mask"
 			>
 				<view class="content wrap" >
 					<br/><br/>
 					<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
+						<u-form-item label-width="150"
+									 label-position="left" label="企业名称" prop="pwd">
+							<u-input :border="border= false"
+									 v-model="params.unitName" placeholder="请输入企业名称"
+									 ></u-input>
+						</u-form-item>
+
 						<u-form-item label-width="150"
 									 label-position="left" label="报表日期" prop="userName" >
 							<u-input placeholder="请选择报表日期" v-model="showText.dateText" @click="openCalendar" type="text"
@@ -89,33 +89,37 @@
 
 
 			<!--报表操作-->
-			<u-popup border-radius="10" v-model="reportPopupConfig.show"
-					 @close="reportPopupConfig.show = false" @open="reportPopupConfig.show = true" :mode="reportPopupConfig.mode"
-					 length="45%" :mask="reportPopupConfig.mask"
+			<u-action-sheet :list="tableConfig.rowDataAction.list" v-model="tableConfig.rowDataAction.show" @click="selectRowDataAction"></u-action-sheet>
+			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.audit.show"
+					 @close="tableConfig.rowDataAction.audit = false" @open="tableConfig.rowDataAction.audit.show = true" :mode="mode = 'top'"
+					 :mask="true"
 			>
 				<view class="content wrap" >
-					<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-						<u-form-item label-width="150"
-									 label-position="left" label="报表日期" prop="userName" >
-							<u-input placeholder="请选择报表日期" v-model="showText.dateText" @click="openCalendar" type="text"
-									 :disabled="true"></u-input>
+					<br/><br/>
+					<u-form ref="uReportActionForm" :errorType="errorType">
+						<u-form-item label-width="150" type="textarea"
+									 label-position="left" label="备注" prop="remark">
+							<u-input :border="border= false"
+									 v-model="" placeholder="请输入备注"
+							></u-input>
 						</u-form-item>
+
 						<u-form-item label-width="150"
 									 label-position="left" label="复核结果" prop="nickName" >
 							<u-input :border="border= false" type="select" :select-open="reviewSelector.show"
-									 v-model="showText.reviewResultText" placeholder="请选择复核结果"
+									 placeholder="请复核"
 									 @click="reviewSelector.show = true"></u-input>
 						</u-form-item>
 						<u-form-item label-width="150"
 									 label-position="left" label="审核结果" prop="pwd">
 							<u-input :border="border= false" type="select" :select-open="auditSelector.show"
-									 v-model="showText.auditResultText" placeholder="请选择审核结果"
+									 v-model="showText.auditResultText" placeholder="请审核"
 									 @click="auditSelector.show = true"></u-input>
 						</u-form-item>
 					</u-form>
 
 					<!--查询按钮-->
-					<u-button @click="reset" >重置</u-button>
+					<u-button @click="" >重置</u-button>
 					<br/>
 					<u-button @click="submit" >查询</u-button>
 
@@ -123,15 +127,17 @@
 
 			</u-popup>
 
+
 		</view>
 		<u-toast ref="uToast" />
 	</view>
 </template>
 
 <script>
+
 	export default {
 		// 注意这里的name命名，就是你以后封装好后使用的组件名
-		name: 'my-report',// main.js 这个参数获取不到，不知道为啥
+		name: 'my-report',//真机中， main.js 这个参数获取不到，不知道为啥
 		props:{
 			reportType:{
 				type: Number,
@@ -142,6 +148,7 @@
 			return {
 				params:{
 					type:-1,
+					unitName:'',
 					reportDateStart:'',
 					reportDateEnd:'',
 					reviewResult: '',
@@ -182,7 +189,20 @@
 					],
 					loadStatus:'nomore',//loading / nomore  / loadmore,
 					tableHeight: 1000,
-					loading:false
+					loading:false,
+					rowDataAction:{
+						show:false,
+						reportId: -1,
+						row:{},
+						list:[{text: '查看详细',value: 'detail'},{text: '复核',value: 'review'},
+							{text: '审核',value: 'audit'},{text: '删除',value: 'delete'}],
+
+						audit:{
+							show: false,
+							reviewShow: true
+						}
+
+					}
 				},
 				touchConfig: {
 					scalImgShow: -1,
@@ -194,23 +214,6 @@
 					show: false,
 					mode: 'top',
 					mask: true, // 是否显示遮罩
-				},
-				reportPopupConfig:{
-					show: false,
-					mode: 'top',
-					mask: true, // 是否显示遮罩
-					reviewParams:{
-						type: -1,
-						id:1
-					},
-					auditParams:{
-						type: -1,
-						id:1,
-					},
-					deleteParams:{
-
-					}
-
 				},
 				calendarConfig:{
 					show: false,
@@ -334,6 +337,7 @@
 				me.params.pageNum = pageNum;
 				me.tableConfig.loading = true;
 
+				//手机短震动
 				uni.vibrateShort({});
 
 				me.$api.reportService('getReportList',
@@ -369,15 +373,51 @@
 				this.showText.reviewResultText = '';
 				this.showText.dateText = '';
 			},
-			reportActionFn(data){
-				console.log(data);
-				uni.showToast({
-					title: `删除第${data.index}行`,
-					duration: 2000
-				});
+			reportActionFn(obj){
+				let row = obj.row;
+				this.tableConfig.rowDataAction.reportId = row.id;
+				this.tableConfig.rowDataAction.show = true;
+				this.tableConfig.rowDataAction.row = row;
+
+			},
+			selectRowDataAction(index){
+				let me = this;
+				let value = me.tableConfig.rowDataAction.list[index].value;
+				let row = me.tableConfig.rowDataAction.row;
+				if(value === 'detail'){
+
+				}else if(value === 'review'){
+					me.tableConfig.rowDataAction.audit.show = true;
+					if(row.reviewResult === 2){
+						me.tableConfig.rowDataAction.audit.reviewShow = true;
+					}
+					// me.tableConfig.rowDataAction.audit.reviewShow =
+				}else if(value === 'audit'){
+					me.tableConfig.rowDataAction.audit.show = true;
+				}else if(value === 'delete') {
+					uni.showActionSheet({
+						itemList: ['取消删除', '确认删除'],
+						success: function (res) {
+							// tabIndex 从0 开始
+							if(res.tapIndex === 1){
+
+								me.$api.reportService('deleteReport',
+										{
+											id: me.tableConfig.rowDataAction.reportId,
+											type: me.reportType
+										}
+								).then(res => {
+									me.showMyToast(me, {title: '删除成功！'});
+									me.submit();
+								})
+
+							}
+						}
+					});
+				}
 			},
 			onSelectionChange(obj){
-				console.log("对比前后，选中的变化")
+				console.log("对比前后，选中的变化");
 				console.log(obj)
 			}
 		}

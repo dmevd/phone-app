@@ -12,13 +12,6 @@
 				reportType:11
 			}
 		},
-		onLoad(){
-			console.log("what the fuck!!")
-
-		},
-		onShow(){
-			console.log("what the fuck!!")
-		},
 		onReachBottom(){
 			this.$refs.report.loadMoreData();
 		}

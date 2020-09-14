@@ -5,15 +5,15 @@
 		<view class="u-demo-wrap">
 			<view>
 				<u-swiper  :height="250" :list="swiper.list" :title="swiper.title" :effect3d="effect3d = true"
-						   :indicator-pos="swiper.indicatorPos" :mode="swiper.mode" :interval="3000" @click="click"></u-swiper>
+						   :indicator-pos="swiper.indicatorPos" :mode="swiper.mode" :interval="3000"></u-swiper>
 			</view>
 		</view>
 
 
 		<!-- 菜单 -->
 		<view class="list-wrap" >
-			<u-cell-group title-bg-color="rgb(243, 244, 246)" :title="getGroupTitle(item)" v-for="(item, index) in menuList" :key="index">
-				<u-cell-item :titleStyle="{fontWeight: 500}" @click="openPage(item1.path)" :title="getFieldTitle(item1)"
+			<u-cell-group title-bg-color="rgb(243, 244, 246)" :title="item.groupName" v-for="(item, index) in menuList" :key="index">
+				<u-cell-item :titleStyle="{fontWeight: 500}" @click="openPage(item1.path)" :title="item1.title"
 				 v-for="(item1, index1) in item.list" :key="index1">
 					<image slot="icon" class="u-cell-icon" :src="getIcon(item1.icon)" mode="widthFix"></image>
 				</u-cell-item>
@@ -83,20 +83,6 @@
 				this.$u.route({
 					url: path
 				})
-			},
-			getGroupTitle(item) {
-				return item.groupName
-			},
-			getFieldTitle(item) {
-				return item.title
-			},
-			click(index) {
-			},
-			change(index) {
-				// this.$refs.uToast.show({
-				// 	title: `滚动到了第${index + 1}张图片`,
-				// 	type: 'success'
-				// })
 			},
 			getMenuList(userInfo){
 				let reloadMenu = uni.getStorageSync('HCreloadMenu');
