@@ -42,7 +42,7 @@
 			>
 				<view class="content wrap" >
 					<br/><br/>
-					<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
+					<u-form :model="model" :rules="rules"  :errorType="errorType">
 						<u-form-item label-width="150"
 									 label-position="left" label="企业名称" prop="pwd">
 							<u-input :border="border= false"
@@ -93,7 +93,7 @@
 			<u-action-sheet :list="tableConfig.rowDataAction.list" v-model="tableConfig.rowDataAction.show" @click="selectRowDataAction"></u-action-sheet>
 			<!--复核-->
 			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.review.show"
-					 @close="tableConfig.rowDataAction.review = false" @open="tableConfig.rowDataAction.review.show = true" mode="top"
+					 @close="tableConfig.rowDataAction.show = false" @open="tableConfig.rowDataAction.review.show = true" mode="top"
 					 :mask="true"
 			>
 				<view class="content wrap" >
@@ -124,17 +124,17 @@
 			</u-popup>
 			<!--审核-->
 			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.audit.show"
-					 @close="tableConfig.rowDataAction.audit = false" @open="tableConfig.rowDataAction.audit.show = true" mode="top"
+					 mode="top" @close="tableConfig.rowDataAction.audit.show = false" @open="tableConfig.rowDataAction.audit.show = true"
 					 :mask="true"
 			>
 				<view class="content wrap" >
 					<br/><br/>
 					<u-form ref="uAuditActionForm" :errorType="errorType">
 						<u-form-item label-width="150"
-									 label-position="left" label="审核结果" >
+									 label-position="left" label="审核结果" prop="noEmpty">
 							<u-input :border="border= false" type="select" :select-open="tableConfig.rowDataAction.audit.selector.show"
-									 v-model="tableConfig.rowDataAction.audit.resultText" placeholder="请审核" :require="true"
-									 @click="tableConfig.rowDataAction.audit.selector.show =true"></u-input>
+									 v-model="tableConfig.rowDataAction.audit.resultText" placeholder="请审核"
+									 @click="tableConfig.rowDataAction.audit.selector.show = true"></u-input>
 						</u-form-item>
 
 						<u-form-item label-width="150"
@@ -171,6 +171,10 @@
 			reportType:{
 				type: Number,
 				default: 11
+			},
+			detailPath:{
+				type: String,
+				default: ''
 			}
 		},
 		data(){
@@ -190,9 +194,14 @@
 					reviewResultText: '',
 					auditResultText:''
 				},
-				rules:[
-
-				],
+				rules:{
+					noEmpty:[{
+						required: true,
+						message: '不可为空',
+						trigger: 'click' ,
+					}]
+				}
+				,
 				errorType:['message'],
 				model: {
 					reportType: -1,
@@ -208,8 +217,8 @@
 						}]
 					},
 						{	title: '报表日期',key: 'date'},{title: '企业',key: 'unitName'},
-						{title: '提交人',	key: 'subByName'},{	title: '复核结果',key: 'reviewResultName'},
-						{title: '复核人',key: 'reviewByName'},{	title: '审核结果',key: 'auditResultName'},
+						{title: '提交人',	key: 'subByName'},{	title: '复核结果',key: 'reviewResultName'},{title: '复核备注',key: 'reviewRemark'},
+						{title: '复核人',key: 'reviewByName'},{	title: '审核结果',key: 'auditResultName'},{title: '审核备注',key: 'auditRemark'},
 						{title: '复核人',key: 'auditByName'}
 
 					],
@@ -310,7 +319,10 @@
 					me.tableConfig.tableHeight = res.windowHeight - (res.windowHeight * 0.17);
 				}
 			});
+
+
 		},
+
 		methods:{
 			openCalendar:function () {
 				this.calendarConfig.show = true;
@@ -428,13 +440,29 @@
 				this.tableConfig.rowDataAction.reportId = row.id;
 				this.tableConfig.rowDataAction.show = true;
 				this.tableConfig.rowDataAction.row = row;
+				if(row.reviewResult == 2 ){//待复核
+					this.tableConfig.rowDataAction.list = [{text: '查看详细',value: 'detail'},
+						{text: '复核',value: 'review'},{text: '删除',value: 'delete'}];
+				}else if(row.auditResult == 2){//待审核
+					this.tableConfig.rowDataAction.list = [{text: '查看详细',value: 'detail'},
+						{text: '审核',value: 'audit'},{text: '删除',value: 'delete'}];
+                }else{
+					this.tableConfig.rowDataAction.list = [{text: '查看详细',value: 'detail'}
+					,{text: '删除',value: 'delete'}];
+				}
 
 			},
 			selectRowDataAction(index){
 				let me = this;
 				let value = me.tableConfig.rowDataAction.list[index].value;
 				if(value === 'detail'){
-
+					let path = me.detailPath;
+					if(path === '' || path === null || path === undefined){
+						return ;
+					}
+					me.$u.route({
+						url: path
+					})
 				}else if(value === 'review'){
 					me.tableConfig.rowDataAction.review.show = true;
 				}else if(value === 'audit'){
@@ -463,21 +491,60 @@
 			},
 			onSelectionChange(obj){
 				console.log("对比前后，选中的变化");
-				console.log(obj)
+				console.log(obj);
+				let rowObj = {};
+				rowObj.index = obj.new.index;
+				rowObj.row = obj.new.item;
+
+				this.reportActionFn(rowObj)
 			},
 			showAudit(index){
 				this.tableConfig.rowDataAction.audit.result = this.tableConfig.rowDataAction.audit.selector.list[index].value;
 				this.tableConfig.rowDataAction.audit.resultText = this.tableConfig.rowDataAction.audit.selector.list[index].text;
 			},
 			auditFn(){
-
+			    let me = this;
+				let result = me.tableConfig.rowDataAction.audit.result;
+				if(result == null || result ===''){
+					me.showMyToast(me, {title: '请选择审核结果！', type:'warning'});
+					return ;
+				}
+                me.$api.reportService('auditReport',
+                    {
+                        id: me.tableConfig.rowDataAction.reportId,
+                        type: me.reportType,
+						auditRemark: me.tableConfig.rowDataAction.audit.remark,
+						auditResult: me.tableConfig.rowDataAction.audit.result
+                    }
+                ).then(res => {
+                	me.tableConfig.rowDataAction.audit.show = false;
+                    me.showMyToast(me, {title: '审核成功！',type:'success'});
+                    me.submit();
+                })
 			},
 			showReview(index){
 				this.tableConfig.rowDataAction.review.result = this.tableConfig.rowDataAction.review.selector.list[index].value;
 				this.tableConfig.rowDataAction.review.resultText = this.tableConfig.rowDataAction.review.selector.list[index].text;
 			},
 			reviewFn(){
-
+				let me = this;
+				let result = me.tableConfig.rowDataAction.review.result;
+				if(result == null || result ===''){
+					me.showMyToast(me, {title: '请选择审核结果！', type:'warning'});
+					return ;
+				}
+				me.$api.reportService('reviewReport',
+						{
+							id: me.tableConfig.rowDataAction.reportId,
+							type: me.reportType,
+							reviewRemark: me.tableConfig.rowDataAction.review.remark,
+							reviewResult: me.tableConfig.rowDataAction.review.result
+						}
+				).then(res => {
+					me.tableConfig.rowDataAction.review.show = false;
+					me.showMyToast(me, {title: '复核成功！',type:'success'});
+					me.submit();
+				})
 			}
 		}
 	}
