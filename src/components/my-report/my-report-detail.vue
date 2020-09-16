@@ -74,18 +74,25 @@
             },
             //行列合并函数
             spanMethod: {
-                type: Function,
-                default: () => {
-                    return () => {
-                        return {
-                            rowspan: 1,
-                            colspan: 1
-                        }
-                    }
+              type: Function,
+              default: (row, column, rowIndex, columnIndex) => {
+                let span = {
+                  rowspan: 1,
+                  colspan: 1
+                };
+
+                if (row.row_span !== undefined) {
+                  span.rowspan = row.row_span[columnIndex] === undefined ? 1 : row.row_span[columnIndex];
                 }
-            },
+
+                if (row.col_span !== undefined ){
+                  span.colspan = row.col_span[columnIndex];
+                }
 
 
+                return span;
+              }
+            }
         },
         data() {
             return {
@@ -112,6 +119,9 @@
             me.report.id = me.options.id;
             me.report.type = me.options.type;
             me.title = me.options.typeName + ' ' + '明细';
+            if(me.dataUrl === ''){
+              me.spanMethod = me.spanRowAndCol;
+            }
 
 
             if(me.dataList != null && me.dataList.length > 0 ){
@@ -127,9 +137,27 @@
                     me.detail.tableConfig.loading = false;
                 });
             }
+
+
         },
         methods:{
+          spanRowAndCol(row, column, rowIndex, columnIndex){
+            let span = {
+              rowspan: 1,
+              colspan: 1
+            };
 
+            if (row.row_span !== undefined) {
+              span.rowspan = row.row_span[columnIndex] === undefined ? 1 : row.row_span[columnIndex];
+            }
+
+            if (row.col_span !== undefined ){
+              span.colspan = row.col_span[columnIndex];
+            }
+
+
+            return span;
+          }
         }
     }
 </script>
