@@ -37,7 +37,8 @@
 	    ,{
             "path" : "pages/report/assayReport/day/detail",
             "style" : {
-				"navigationBarTitleText": "化验日报表 明细"
+				"navigationBarTitleText": "化验日报表 明细",
+				"navigationStyle": "custom"
 			}
         },{
 			"path": "pages/report/assayReport/month/index",
@@ -49,7 +50,8 @@
 	    ,{
             "path" : "pages/report/assayReport/month/detail",
             "style" : {
-				"navigationBarTitleText": "化验月报表 明细"
+				"navigationBarTitleText": "化验月报表 明细",
+				"navigationStyle": "custom"
 			}
         },
 		{
@@ -62,7 +64,8 @@
 		{
 			"path" : "pages/report/assayReport/month2/detail",
 			"style" : {
-				"navigationBarTitleText": "化验月报表2 明细"
+				"navigationBarTitleText": "化验月报表2 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -75,7 +78,8 @@
 		{
 			"path" : "pages/report/assayReport/quarter/detail",
 			"style" : {
-				"navigationBarTitleText": "污水化验季报表 明细"
+				"navigationBarTitleText": "污水化验季报表 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -88,7 +92,8 @@
 		{
 			"path" : "pages/report/assayReport/quarter2/detail",
 			"style" : {
-				"navigationBarTitleText": "污泥化验季报表 明细"
+				"navigationBarTitleText": "污泥化验季报表 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -101,7 +106,8 @@
 		,{
 			"path" : "pages/report/assayReport/year/detail",
 			"style" : {
-				"navigationBarTitleText": "污水化验年报表 明细"
+				"navigationBarTitleText": "污水化验年报表 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -114,7 +120,8 @@
 		{
 			"path" : "pages/report/assayReport/year2/detail",
 			"style" : {
-				"navigationBarTitleText": "污泥化验年报表 明细"
+				"navigationBarTitleText": "污泥化验年报表 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -127,7 +134,8 @@
 		{
 			"path" : "pages/report/deviceReport/month/detail",
 			"style" : {
-				"navigationBarTitleText": "设备月报表 明细"
+				"navigationBarTitleText": "设备月报表 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -140,7 +148,8 @@
 		{
 			"path" : "pages/report/deviceReport/quarter/detail",
 			"style" : {
-				"navigationBarTitleText": "设备季报表 明细"
+				"navigationBarTitleText": "设备季报表 明细",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -153,7 +162,36 @@
 		{
 			"path" : "pages/report/deviceReport/year/detail",
 			"style" : {
-				"navigationBarTitleText": "设备年报表 明细"
+				"navigationBarTitleText": "设备年报表 明细",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/report/inventoryReport/month/index",
+			"style": {
+				"navigationBarTitleText": "库存月报表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/report/inventoryReport/month/detail",
+			"style" : {
+				"navigationBarTitleText": "库存月报表 明细",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/report/inventoryReport/year/index",
+			"style": {
+				"navigationBarTitleText": "库存年报表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/report/inventoryReport/year/detail",
+			"style" : {
+				"navigationBarTitleText": "库存年报表 明细",
+				"navigationStyle": "custom"
 			}
 		}
     ],

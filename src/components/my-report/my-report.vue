@@ -93,7 +93,7 @@
 			<u-action-sheet :list="tableConfig.rowDataAction.list" v-model="tableConfig.rowDataAction.show" @click="selectRowDataAction"></u-action-sheet>
 			<!--复核-->
 			<u-popup border-radius="10" v-model="tableConfig.rowDataAction.review.show"
-					 @close="tableConfig.rowDataAction.show = false" @open="tableConfig.rowDataAction.review.show = true" mode="top"
+					 @close="tableConfig.rowDataAction.review.show = false" @open="tableConfig.rowDataAction.review.show = true" mode="top"
 					 :mask="true"
 			>
 				<view class="content wrap" >
@@ -320,7 +320,7 @@
 				}
 			});
 
-
+			me.submit();
 		},
 
 		methods:{
@@ -461,7 +461,8 @@
 						return ;
 					}
 					me.$u.route({
-						url: path
+						url: path,
+						params: me.tableConfig.rowDataAction.row
 					})
 				}else if(value === 'review'){
 					me.tableConfig.rowDataAction.review.show = true;

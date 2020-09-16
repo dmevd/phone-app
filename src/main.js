@@ -30,6 +30,10 @@ import myReport from './components/my-report/my-report.vue';
 //Vue.component(myReport.name, myReport);
 Vue.component('my-report', myReport);
 
+import myReportDetail from './components/my-report/my-report-detail.vue';
+// 不起作用，不知道啥原因
+Vue.component('my-report-detail', myReportDetail);
+
 const app = new Vue({
   store,
   ...App

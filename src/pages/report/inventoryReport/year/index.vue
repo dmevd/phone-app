@@ -1,16 +1,13 @@
 <template>
-	<view>
-		<my-report :reportType="reportType" ref='report' :detailPath="detailPath">
-		</my-report>
-	</view>
+		<my-report :reportType="reportType" ref='report' :detailPath="detailPath"></my-report>
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
-				reportType:11,
-				detailPath: '/pages/report/assayReport/day/detail'
+				reportType:25,
+				detailPath:'/pages/report/inventoryReport/year/detail'
 			}
 		},
 		onReachBottom(){
