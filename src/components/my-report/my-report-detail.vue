@@ -60,13 +60,17 @@
                 type: String,
                 default: ''
             },
+            dataList:{
+                type: Array,
+                default: ()=>[]
+            },
             popItems:{
                 type: Array,
                 default: ()=>[]
             },
-            dataList:{
-                type: Array,
-                default: ()=>[]
+            getDataList:{
+                type: Function,
+                default: list => list
             },
             columns:{
                 type: Array,
@@ -124,7 +128,7 @@
             }
 
 
-            if(me.dataList != null && me.dataList.length > 0 ){
+            if(me.dataUrl === '' || me.dataList.length > 0 ){
                 me.detail.tableConfig.tableData = me.dataList;
                 me.detail.tableConfig.loading = false;
             }else {
@@ -133,7 +137,7 @@
                 ).then(res => {
                     let list = res.result.list;
                     console.log("获取接口数据长度: " + list.length);
-                    me.detail.tableConfig.tableData = list;
+                    me.detail.tableConfig.tableData = me.getDataList(list);
                     me.detail.tableConfig.loading = false;
                 });
             }
